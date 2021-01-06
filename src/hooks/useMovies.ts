@@ -29,7 +29,20 @@ const movieQuery = gql`
   }
 `;
 
-export const useMovies = (searchTerm: string = "Good will") => {
+const recommendedQuery = gql`
+  query RecommendedMovies($id: Int!) {
+    getRecommendedMovies(movie_id: $id, page: 1) {
+      results {
+        id
+        title
+        original_title
+        overview
+      }
+    }
+  }
+`;
+
+export const useMovies = (searchTerm: string) => {
   return useQuery(
     ["movies", { searchTerm }],
     () => {
@@ -43,7 +56,7 @@ export const useMovies = (searchTerm: string = "Good will") => {
 
 export const useMovie = (id: number) => {
   return useQuery<Movie>(
-    ["movie", { id }],
+    ["movies", { id }],
     () => {
       return request<{ getMovie: Movie }>(endpoint, movieQuery, { id }).then(
         ({ getMovie }) => getMovie
@@ -51,4 +64,14 @@ export const useMovie = (id: number) => {
     },
     { retry: false }
   );
+};
+
+export const useRecommendedMovies = (id: number) => {
+  return useQuery(["movies", { id, recommended: true }], () => {
+    return request<{ getRecommendedMovies: SearchMovies }>(
+      endpoint,
+      recommendedQuery,
+      { id }
+    ).then(({ getRecommendedMovies }) => getRecommendedMovies);
+  });
 };

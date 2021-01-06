@@ -6,10 +6,13 @@ import { SearchMovie } from "interfaces/Movie";
 import React, { FC } from "react";
 import MovieDetails from "./MovieDetails";
 
-type Props = SearchMovie;
+interface Props {
+  searchMovie: SearchMovie;
+  onSelect?: (movie: SearchMovie) => void;
+}
 
 export const MovieListItem: FC<Props> = (props) => {
-  const { title } = props;
+  const { searchMovie, onSelect } = props;
 
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
@@ -18,9 +21,9 @@ export const MovieListItem: FC<Props> = (props) => {
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Typography>{title}</Typography>
+        <Typography>{searchMovie.title}</Typography>
       </AccordionSummary>
-      <MovieDetails {...props} />
+      <MovieDetails searchMovie={searchMovie} onSelect={onSelect} />
     </Accordion>
   );
 };

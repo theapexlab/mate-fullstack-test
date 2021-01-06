@@ -6,15 +6,17 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import SearchIcon from "@material-ui/icons/Search";
 import { Field, Form, FormikProvider, useFormik } from "formik";
+import { SearchMovie } from "interfaces/Movie";
 import React, { FC } from "react";
 
 interface Props {
   searchTerm: string;
+  selectedMovie: SearchMovie | null;
   onSearchTermChange: (searchTerm: string) => void;
 }
 
 export const Header: FC<Props> = (props) => {
-  const { searchTerm, onSearchTermChange } = props;
+  const { searchTerm, selectedMovie, onSearchTermChange } = props;
 
   const formik = useFormik({
     initialValues: {
@@ -28,17 +30,13 @@ export const Header: FC<Props> = (props) => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Box marginLeft="24px">
+        <Box marginRight="24px">
           <Typography>Movies</Typography>
         </Box>
         <FormikProvider value={formik}>
           <Form>
             <Paper>
-              <Box
-                display="flex"
-                alignItems="center"
-                padding="0 0 0 16px"
-              >
+              <Box display="flex" alignItems="center" padding="0 0 0 16px">
                 <Field
                   name="searchTerm"
                   as={InputBase}
@@ -46,13 +44,18 @@ export const Header: FC<Props> = (props) => {
                   placeholder="Search…"
                   inputProps={{ "aria-label": "search" }}
                 />
-                <Button variant="contained">
+                <Button type="submit" variant="contained">
                   <SearchIcon />
                 </Button>
               </Box>
             </Paper>
           </Form>
         </FormikProvider>
+        {selectedMovie && (
+          <Box marginLeft="24px">
+            <Typography>Recommended by "{selectedMovie.title}"</Typography>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );
