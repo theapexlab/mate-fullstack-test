@@ -16,11 +16,7 @@ export const MovieListItem: FC<Props> = (props) => {
 
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>{searchMovie.title}</Typography>
       </AccordionSummary>
       <MovieDetails searchMovie={searchMovie} onSelect={onSelect} />
